@@ -34,7 +34,9 @@
         <style>
             #container
             {
-                margin: 4px;
+                margin: 0px;
+                width: 100%;
+                height: 100%
             }
             #result
             {
@@ -42,26 +44,45 @@
             }
         </style>
         <script>
+            var ctx; 
+            var monster;
+            var monsterPosX=0;
+            var monsterPosY=0;
+            
             window.onload = function()
             {
-                init();
-                //document.addEventListener('deviceready', init, false);
+                //init();
+                document.addEventListener('deviceready', init, false);
+                ctx = (document.getElementById('myCanvas')).getContext("2d");
+                ctx.canvas.width  = window.innerWidth;
+                ctx.canvas.height = window.innerHeight;
+                displayMonster();
+            }
+            
+            function displayMonster()
+            {
+                monster = new Image();
+                monster.onload = function()
+                {
+                    ctx.drawImage(monster,  (window.innerWidth/2)-25, (window.innerHeight/2)-25);
+                }
+                monster.src = "monster.gif";
             }
             
             function init()
             {
-                var accel = navigator.accelerometer.watchAcceleration(success, accelError, {frequency: 1000});    
+               var accel = navigator.accelerometer.watchAcceleration(success, accelError, {frequency: 1000});    
             }
             
             function success(accel)
             {
                 var x = accel.x;
                 var y = accel.y;
-                var z = accel.z;
                 
-                document.getElementById('xOut').innerHTML = x;
-                document.getElementById('yOut').innerHTML = y;
-                document.getElementById('zOut').innerHTML = z;
+                monster.x = monster.x + x;
+                monster.y = monster.y + y;
+                
+               
                 
             }
             
@@ -76,11 +97,7 @@
     </head>
     <body>
         <div id="container">
-            <div id="result">
-                <strong>X: </strong><output id="xOut"></output><br/>
-                <strong>Y: </strong><output id="yOut"></output><br/>
-                <strong>Z: </strong><output id="zOut"></output><br/>
-            </div>
+            <canvas id="myCanvas"></canvas>
         </div> <!-- container -->
     </body>
 </html>
