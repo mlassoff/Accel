@@ -51,13 +51,13 @@
             
             window.onload = function()
             {
-                init();
-                //document.addEventListener('deviceready', init, false);
+                //init();
+                document.addEventListener('deviceready', init, false);
                 ctx = (document.getElementById('myCanvas')).getContext("2d");
                 ctx.canvas.width  = window.innerWidth;
-                ctx.canvas.height = window.innerHeight-40;
+                ctx.canvas.height = window.innerHeight;
                 monsterPosX = window.innerWidth/2 - 25;
-                monsterPosY = window.innerWidth/2 - 25;
+                monsterPosY = window.innerHeight/2 - 25;
                 displayMonster();
                 
             }
@@ -74,16 +74,15 @@
             
             function init()
             {
-                var accel = navigator.accelerometer.watchAcceleration(success, accelError, {frequency: 100});    
+                var accel = navigator.accelerometer.watchAcceleration(success, accelError, {frequency: 50});    
             }
             
             function success(accel)
-            {
+            {                
                 ctx.clearRect(0,0,window.innerWidth, window.innerHeight);
-                monsterPosX += accel.x;
+                monsterPosX += accel.x * -1;
                 monsterPosY += accel.y;
-                ctx.drawImage(monster, x,y);
-                
+                ctx.drawImage(monster, monsterPosX, monsterPosY);  
             }
             
             function accelError(e)
@@ -98,7 +97,6 @@
     <body>
         <div id="container">
             <canvas id="myCanvas"></canvas>
-            <div id="out">Hi</div>
         </div> <!-- container -->
     </body>
 </html>
