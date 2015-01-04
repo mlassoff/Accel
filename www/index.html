@@ -51,12 +51,15 @@
             
             window.onload = function()
             {
-                //init();
-                document.addEventListener('deviceready', init, false);
+                init();
+                //document.addEventListener('deviceready', init, false);
                 ctx = (document.getElementById('myCanvas')).getContext("2d");
                 ctx.canvas.width  = window.innerWidth;
-                ctx.canvas.height = window.innerHeight;
+                ctx.canvas.height = window.innerHeight-40;
+                monsterPosX = window.innerWidth/2 - 25;
+                monsterPosY = window.innerWidth/2 - 25;
                 displayMonster();
+                
             }
             
             function displayMonster()
@@ -64,25 +67,22 @@
                 monster = new Image();
                 monster.onload = function()
                 {
-                    ctx.drawImage(monster,  (window.innerWidth/2)-25, (window.innerHeight/2)-25);
+                    ctx.drawImage(monster,  monsterPosX, monsterPosY);
                 }
                 monster.src = "monster.gif";
             }
             
             function init()
             {
-               var accel = navigator.accelerometer.watchAcceleration(success, accelError, {frequency: 1000});    
+                var accel = navigator.accelerometer.watchAcceleration(success, accelError, {frequency: 100});    
             }
             
             function success(accel)
             {
-                var x = accel.x;
-                var y = accel.y;
-                
-                monster.x = monster.x + x;
-                monster.y = monster.y + y;
-                
-               
+                ctx.clearRect(0,0,window.innerWidth, window.innerHeight);
+                monsterPosX += accel.x;
+                monsterPosY += accel.y;
+                ctx.drawImage(monster, x,y);
                 
             }
             
@@ -98,6 +98,7 @@
     <body>
         <div id="container">
             <canvas id="myCanvas"></canvas>
+            <div id="out">Hi</div>
         </div> <!-- container -->
     </body>
 </html>
